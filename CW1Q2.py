@@ -51,23 +51,24 @@ def merge_sort(transactions, stats=None):
     if stats is not None:
         stats["recursive_calls"] += 1
 
-    # Base case: an array with 0 or 1 item is already sorted.
+    # BASE CASE:
+    # If the list has 0 or 1 transaction, it is already sorted.
     if len(transactions) <= 1:
         return transactions
 
     # DIVIDE STEP:
-    # Split the transaction list into two smaller halves.
+    # Find the middle index and split the transaction list into two halves.
     mid = len(transactions) // 2
     left_half = transactions[:mid]
     right_half = transactions[mid:]
 
     # CONQUER STEP:
-    # Recursively sort both halves.
+    # Recursively sort the left half and the right half.
     sorted_left = merge_sort(left_half, stats)
     sorted_right = merge_sort(right_half, stats)
 
     # COMBINE STEP:
-    # Merge the two sorted halves into one sorted list.
+    # Merge the two sorted halves back into one sorted list.
     return merge(sorted_left, sorted_right)
 
 
@@ -76,7 +77,9 @@ def merge(left, right):
     i = 0
     j = 0
 
-    # Compare transaction_id from both halves and add the smaller one first.
+    # COMBINE STEP:
+    # Compare transaction_id values from both halves.
+    # The smaller transaction_id is inserted into the sorted list first.
     while i < len(left) and j < len(right):
         if left[i].transaction_id <= right[j].transaction_id:
             sorted_transactions.append(left[i])
@@ -85,11 +88,12 @@ def merge(left, right):
             sorted_transactions.append(right[j])
             j += 1
 
-    # Add any remaining records after one side becomes empty.
+    # Add remaining transactions from the left half, if any.
     while i < len(left):
         sorted_transactions.append(left[i])
         i += 1
 
+    # Add remaining transactions from the right half, if any.
     while j < len(right):
         sorted_transactions.append(right[j])
         j += 1
